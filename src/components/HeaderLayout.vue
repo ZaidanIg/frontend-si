@@ -13,7 +13,7 @@
         <img src="../assets/images/fti-logo.png" alt="logo" width="88" height="88" />
         <div class="text-white">
           <h1 class="text-3xl font-bold">ORGANISASI FAKULTAS TEKNOLOGI INFORMASI</h1>
-          <p class="text-lg">Universitas Sebelas April</p>
+          <p class="text-xl font-semibold">Universitas Sebelas April</p>
         </div>
       </div>
 
