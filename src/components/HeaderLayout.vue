@@ -2,7 +2,7 @@
   <header class="relative w-full">
     <!-- Background dengan efek brightness -->
     <div
-      class="absolute inset-0 bg-[url('@/assets/images/header-hero.jpg')] bg-cover bg-center brightness-75"
+      class="absolute -mt-64 inset-0 bg-[url('@/assets/images/header-hero.jpg')] bg-cover bg-center brightness-75"
     ></div>
 
     <!-- Overlay gradasi untuk memperjelas teks -->
