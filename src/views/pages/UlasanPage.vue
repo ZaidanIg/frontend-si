@@ -27,58 +27,17 @@
 
     <!-- Daftar Ulasan Mahasiswa -->
     <div class="w-full max-w-3xl space-y-8">
-      <!-- Ulasan Card -->
-      <div class="bg-white p-6 rounded-lg shadow flex flex-col space-y-4">
+      <!-- Dynamically generated aspiration cards -->
+      <div
+        v-for="(aspiration, index) in aspirations"
+        :key="index"
+        class="bg-white p-6 rounded-lg shadow flex flex-col space-y-4"
+      >
         <div class="flex justify-between items-center">
-          <h2 class="font-semibold text-lg">Deden Nurchayadi</h2>
-          <p class="text-gray-500 text-sm">10 November 2024</p>
+          <h2 class="font-semibold text-lg">{{ aspiration.nama }}</h2>
+          <p class="text-gray-500 text-sm">{{ new Date(aspiration.createdAt).toLocaleDateString() }}</p>
         </div>
-        <p class="text-gray-700">
-          “Saya merasa fasilitas ruang kelas online di fakultas perlu ditingkatkan. Beberapa kali
-          mengalami kendala teknis yang cukup mengganggu proses pembelajaran. Mohon diperbaiki agar
-          lebih optimal.”
-        </p>
-        <button class="text-purple-600 font-semibold">Lihat Lebih</button>
-        <div class="flex justify-between items-center">
-          <p class="text-sm text-gray-500">Rating: Suka (120) - Tidak Suka (5)</p>
-          <span class="text-sm bg-yellow-200 text-yellow-700 rounded-full px-4 py-1"
-            >Status Aspirasi: Sedang Diproses</span
-          >
-        </div>
-        <div class="bg-purple-100 p-3 rounded-lg">
-          <p class="text-sm text-purple-700">
-            <strong>Respon Admin:</strong> Terima kasih atas masukannya. Kami telah mencatat masalah
-            ini dan sedang berkoordinasi dengan tim IT untuk meningkatkan performa platform online.
-            Harap bersabar, perbaikan akan segera dilakukan.
-          </p>
-        </div>
-      </div>
-
-      <!-- Ulasan Card 2 -->
-      <div class="bg-white p-6 rounded-lg shadow flex flex-col space-y-4">
-        <div class="flex justify-between items-center">
-          <h2 class="font-semibold text-lg">M Husni Haykal</h2>
-          <p class="text-gray-500 text-sm">15 November 2024</p>
-        </div>
-        <p class="text-gray-700">
-          “Saya merasa fasilitas ruang kelas online di fakultas perlu ditingkatkan. Beberapa kali
-          mengalami kendala teknis yang cukup mengganggu proses pembelajaran. Mohon diperbaiki agar
-          lebih optimal.”
-        </p>
-        <button class="text-purple-600 font-semibold">Lihat Lebih</button>
-        <div class="flex justify-between items-center">
-          <p class="text-sm text-gray-500">Rating: Suka (120) - Tidak Suka (5)</p>
-          <span class="text-sm bg-green-200 text-green-700 rounded-full px-4 py-1"
-            >Status Aspirasi: Selesai</span
-          >
-        </div>
-        <div class="bg-purple-100 p-3 rounded-lg">
-          <p class="text-sm text-purple-700">
-            <strong>Respon Admin:</strong> Terima kasih atas masukannya. Kami telah mencatat masalah
-            ini dan sedang berkoordinasi dengan tim IT untuk meningkatkan performa platform online.
-            Harap bersabar, perbaikan akan segera dilakukan.
-          </p>
-        </div>
+        <p class="text-gray-700">{{ aspiration.deskripsi }}</p>
       </div>
     </div>
 
@@ -92,3 +51,41 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import axios from 'axios';
+
+interface Aspiration {
+  id: number;
+  nama: string;
+  kelas: string;
+  prodi: string;
+  deskripsi: string;
+  createdAt: string;
+}
+
+export default defineComponent({
+  data() {
+    return {
+      aspirations: [] as Aspiration[], // Properly typed aspirations array
+    };
+  },
+  async mounted() {
+    // Fetch aspirations data when the component is mounted
+    this.fetchAspirations();
+  },
+  methods: {
+    // Fetch aspirations from the API
+    async fetchAspirations() {
+      try {
+        const response = await axios.get('http://localhost:5000/api/aspirations'); // Adjust API endpoint if necessary
+        this.aspirations = response.data; // Store the fetched aspirations in the data property
+      } catch (error) {
+        console.error('Error fetching aspirations:', error);
+      }
+    },
+  },
+});
+</script>
+

@@ -16,26 +16,20 @@
       <!-- Form Kotak Aspirasi -->
       <div class="bg-gray-300 p-6 rounded-lg">
         <h2 class="font-semibold text-lg text-center mb-4">Kotak Aspirasi</h2>
-        <form class="space-y-4">
+        <form @submit.prevent="submitForm" class="space-y-4">
           <div>
             <label class="block text-gray-700">Nama :</label>
             <input
+              v-model="formData.nama"
               type="text"
               class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-indigo-500"
               placeholder="Masukkan Nama Anda"
             />
           </div>
           <div>
-            <label class="block text-gray-700">NIM :</label>
-            <input
-              type="text"
-              class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Masukkan NIM Anda"
-            />
-          </div>
-          <div>
             <label class="block text-gray-700">Kelas :</label>
             <input
+              v-model="formData.kelas"
               type="text"
               class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-indigo-500"
               placeholder="Masukkan Kelas Anda"
@@ -44,6 +38,7 @@
           <div>
             <label class="block text-gray-700">Prodi :</label>
             <input
+              v-model="formData.prodi"
               type="text"
               class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-indigo-500"
               placeholder="Masukkan Program Studi Anda"
@@ -51,6 +46,7 @@
           </div>
           <div>
             <textarea
+              v-model="formData.deskripsi"
               class="w-full p-2 border border-gray-400 rounded-md focus:outline-none focus:border-indigo-500"
               placeholder="Masukkan Aspirasi Anda"
               rows="4"
@@ -58,7 +54,8 @@
           </div>
           <div class="container flex justify-end">
             <button
-              class="bg-purple-400 text-white rounded-lg font-semibold px-4 py-6[box-shadow:0_10px_0_purple] active:[box-shadow:0_5px_0_purple]active:translate-y-[5px]"
+              type="submit"
+              class="bg-purple-400 text-white rounded-lg font-semibold px-4 py-2"
             >
               Kirim
             </button>
@@ -68,3 +65,58 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import axios from 'axios';
+
+export default defineComponent({
+  data() {
+    return {
+      // Form data model
+      formData: {
+        nama: '',
+        kelas: '',
+        prodi: '',
+        deskripsi: ''
+      }
+    };
+  },
+  methods: {
+    // Submit form data to the server using Axios
+    async submitForm() {
+      try {
+        // Send POST request with form data
+        const response = await axios.post('http://localhost:5000/api/aspirations', this.formData, {
+          headers: {
+            'Content-Type': 'application/json', // Ensure JSON content type
+          }
+        });
+
+        // Handle success
+        if (response.status === 201) {
+          alert('Aspirasi berhasil dikirim!');
+          // Optionally reset the form after successful submission
+          this.resetForm();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim aspirasi.');
+      }
+    },
+    // Reset form data after submission
+    resetForm() {
+      this.formData = {
+        nama: '',
+        kelas: '',
+        prodi: '',
+        deskripsi: ''
+      };
+    }
+  }
+});
+</script>
+
+<style scoped>
+/* Add any custom styles you need here */
+</style>
